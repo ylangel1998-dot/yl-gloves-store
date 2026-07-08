@@ -4,48 +4,266 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIP Membership - The GloveStory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Georgia', serif; color: #333; }
-    header { padding: 2rem; text-align: center; border-bottom: 1px solid #eee; }
-    .logo { font-size: 1.5rem; letter-spacing: 0.3em; text-decoration: none; color: #333; }
-    nav { margin-top: 1rem; }
-    nav a { margin: 0 1rem; text-decoration: none; color: #666; }
-    main { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; text-align: center; }
-    .vip-card { background: #1a1a1a; color: white; padding: 4rem 2rem; border-radius: 8px; margin: 2rem 0; }
-    .price { font-size: 4rem; font-weight: 300; }
-    .period { font-size: 1.2rem; opacity: 0.7; }
-    .features { list-style: none; margin: 2rem 0; text-align: left; }
-    .features li { padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .features li:before { content: "✓ "; color: #4CAF50; }
-    .cta { display: inline-block; background: white; color: #1a1a1a; padding: 1rem 3rem; text-decoration: none; font-weight: 500; margin-top: 1rem; }
+    :root {
+      --color-primary: #1a1a1a;
+      --color-secondary: #4a4a4a;
+      --color-accent: #8b7355;
+      --color-light: #f8f6f3;
+      --color-white: #ffffff;
+      --color-border: #e5e5e5;
+      --color-success: #4CAF50;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Montserrat', -apple-system, sans-serif;
+    }
+    body { font-family: var(--font-sans); color: var(--color-primary); background: var(--color-white); }
+    a { text-decoration: none; color: inherit; }
+    header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; border-bottom: 1px solid var(--color-border); }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 300; letter-spacing: 0.3em; }
+    nav { display: flex; gap: 2.5rem; }
+    nav a { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-secondary); }
+    nav a:hover, nav a.active { color: var(--color-primary); }
+    .header-actions { display: flex; gap: 1.5rem; align-items: center; }
+    .header-actions button { background: none; border: none; cursor: pointer; font-size: 0.85rem; color: var(--color-secondary); }
+    .cart-icon { position: relative; }
+    .cart-count { position: absolute; top: -8px; right: -12px; background: var(--color-accent); color: white; font-size: 0.65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    main { padding-top: 80px; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-title { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem; }
+    .vip-hero { text-align: center; padding: 4rem 2rem; background: var(--color-light); }
+    .vip-card { max-width: 600px; margin: 3rem auto; background: var(--color-primary); color: white; padding: 4rem 2rem; text-align: center; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .price { font-size: 5rem; font-weight: 300; font-family: var(--font-serif); }
+    .period { font-size: 1.2rem; opacity: 0.7; margin-bottom: 2rem; }
+    .features { list-style: none; text-align: left; margin: 2rem 0; }
+    .features li { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 1rem; }
+    .features li:last-child { border-bottom: none; }
+    .features li::before { content: "✓ "; color: var(--color-success); margin-right: 0.5rem; }
+    .btn { display: inline-block; padding: 1rem 3rem; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid currentColor; transition: all 0.3s; cursor: pointer; background: transparent; text-decoration: none; }
+    .btn-primary { background: white; color: var(--color-primary); border-color: white; }
+    .btn-primary:hover { background: var(--color-accent); border-color: var(--color-accent); color: white; }
+    .features-section { padding: 4rem 2rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; max-width: 1000px; margin: 3rem auto; }
+    .feature-card { text-align: center; padding: 2rem; }
+    .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .feature-title { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .feature-desc { color: var(--color-secondary); font-size: 0.9rem; }
+    .testimonials { background: var(--color-light); padding: 4rem 2rem; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1000px; margin: 3rem auto; }
+    .testimonial { background: white; padding: 2rem; border-radius: 8px; text-align: center; }
+    .testimonial-text { font-style: italic; color: var(--color-secondary); margin-bottom: 1rem; line-height: 1.6; }
+    .testimonial-author { font-weight: 500; }
+    footer { background: var(--color-light); padding: 4rem 2rem; margin-top: auto; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; text-align: center; color: var(--color-secondary); font-size: 0.85rem; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal { background: white; max-width: 500px; width: 90%; padding: 2rem; border-radius: 8px; }
+    .modal-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+    .modal-title { font-family: var(--font-serif); font-size: 1.5rem; }
+    .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--color-secondary); }
+    .form-group input { width: 100%; padding: 0.8rem; border: 1px solid var(--color-border); font-family: inherit; }
+    .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; }
+    .toast { padding: 1rem 1.5rem; background: var(--color-primary); color: white; border-radius: 4px; margin-bottom: 0.5rem; animation: slideIn 0.3s; }
+    .user-status { font-size: 0.8rem; padding: 0.3rem 0.8rem; background: var(--color-success); color: white; border-radius: 4px; margin-left: 1rem; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @media (max-width: 768px) { nav { display: none; } .price { font-size: 3rem; } }
   </style>
 </head>
 <body>
   <header>
-    <a href="/" class="logo">THE GLOVESTORY</a>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/products">Collections</a>
-      <a href="/about">About</a>
-      <a href="/membership">Join VIP</a>
-    </nav>
-  </header>
-  <main>
-    <h1>Exclusive Membership</h1>
-    <div class="vip-card">
-      <div class="price">$19.9</div>
-      <div class="period">per month</div>
-      <ul class="features">
-        <li>40% OFF on all products</li>
-        <li>Early access to new collections</li>
-        <li>Free shipping worldwide</li>
-        <li>Complimentary glove cleaning</li>
-        <li>Priority customer support</li>
-        <li>Exclusive member events</li>
-      </ul>
-      <a href="#" class="cta">JOIN NOW</a>
+    <div class="header-inner">
+      <a href="/" class="logo">THE GLOVESTORY</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/products">Collections</a>
+        <a href="/about">About</a>
+        <a href="/membership" class="active">VIP</a>
+      </nav>
+      <div class="header-actions">
+        <button onclick="window.location.href='/'">Cart <span class="cart-count" id="cartCount"></span></button>
+      </div>
     </div>
+  </header>
+
+  <main>
+    <section class="vip-hero">
+      <h1 class="section-title">Exclusive VIP Membership</h1>
+      <p style="color: var(--color-secondary); max-width: 600px; margin: 0 auto;">Join our exclusive membership and enjoy premium benefits on every purchase.</p>
+
+      <div class="vip-card">
+        <div class="price">$19.9</div>
+        <div class="period">per month</div>
+        <ul class="features">
+          <li>40% OFF on all products</li>
+          <li>Early access to new collections</li>
+          <li>Free shipping worldwide</li>
+          <li>Complimentary glove cleaning service</li>
+          <li>Priority customer support</li>
+          <li>Exclusive member-only events</li>
+          <li>Birthday special offers</li>
+        </ul>
+        <button class="btn btn-primary" onclick="handleJoinClick()" id="joinBtn">JOIN NOW</button>
+        <div id="vipStatus" style="display: none; margin-top: 1rem;">
+          <span class="user-status">✓ VIP ACTIVE</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <h2 class="section-title">Member Benefits</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">💰</div>
+          <h3 class="feature-title">Exclusive Discounts</h3>
+          <p class="feature-desc">Save 40% on every order with your VIP membership. More you shop, more you save.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Early Access</h3>
+          <p class="feature-desc">Be the first to shop new arrivals before they're available to the public.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎁</div>
+          <h3 class="feature-title">Free Shipping</h3>
+          <p class="feature-desc">Complimentary worldwide shipping on all your orders, no minimum required.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3 class="feature-title">Premium Service</h3>
+          <p class="feature-desc">Dedicated VIP support line and priority handling for all your requests.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <h2 class="section-title">What Our Members Say</h2>
+      <div class="testimonial-grid">
+        <div class="testimonial">
+          <p class="testimonial-text">"The 40% discount alone has saved me hundreds of dollars. The quality of these gloves is unmatched!"</p>
+          <p class="testimonial-author">- Michael R.</p>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-text">"Early access to new collections means I always get my favorite styles before they sell out."</p>
+          <p class="testimonial-author">- Sarah L.</p>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial-text">"The free glove cleaning service is a game changer. My gloves always look brand new!"</p>
+          <p class="testimonial-author">- James W.</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; 2024 The GloveStory. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Create Account</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account & Join VIP</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal" style="text-align: center;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+      <h2 class="modal-title" style="margin-bottom: 1rem;">Welcome to VIP!</h2>
+      <p style="color: var(--color-secondary); margin-bottom: 1.5rem;">Your account has been created and VIP membership activated!</p>
+      <button class="btn btn-primary" onclick="window.location.href='/products'">Start Shopping</button>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://coyyldqmimzflbcevppj.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkVIPStatus();
+    });
+
+    function checkVIPStatus() {
+      const user = localStorage.getItem('glove_user');
+      if (user) {
+        const userData = JSON.parse(user);
+        if (userData.isVIP) {
+          document.getElementById('joinBtn').style.display = 'none';
+          document.getElementById('vipStatus').style.display = 'block';
+        }
+      }
+    }
+
+    function handleJoinClick() {
+      const user = localStorage.getItem('glove_user');
+      if (user) {
+        // User is logged in, proceed to VIP signup
+        showSuccessModal();
+      } else {
+        // Show signup modal
+        document.getElementById('authModal').classList.add('active');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('authModal').classList.remove('active');
+    }
+
+    async function handleSignup(event) {
+      event.preventDefault();
+      const form = event.target;
+      const name = form.name.value;
+      const email = form.email.value;
+
+      // Simulated signup - in production, use Supabase Auth
+      const user = { email, name, isVIP: true };
+      localStorage.setItem('glove_user', JSON.stringify(user));
+
+      closeModal();
+      showSuccessModal();
+      showToast('Welcome to The GloveStory VIP!');
+    }
+
+    function showSuccessModal() {
+      document.getElementById('successModal').classList.add('active');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
 </body>
 </html>
