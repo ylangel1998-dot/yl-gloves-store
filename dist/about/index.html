@@ -3,34 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Story - The GloveStory</title>
+  <title>About Us - The GloveStory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Georgia', serif; color: #333; }
-    header { padding: 2rem; text-align: center; border-bottom: 1px solid #eee; }
-    .logo { font-size: 1.5rem; letter-spacing: 0.3em; text-decoration: none; color: #333; }
-    nav { margin-top: 1rem; }
-    nav a { margin: 0 1rem; text-decoration: none; color: #666; }
-    main { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
-    h1 { font-weight: 300; margin-bottom: 2rem; }
-    p { line-height: 1.8; margin-bottom: 1.5rem; color: #555; }
+    :root {
+      --color-primary: #1a1a1a;
+      --color-secondary: #4a4a4a;
+      --color-accent: #8b7355;
+      --color-light: #f8f6f3;
+      --color-white: #ffffff;
+      --color-border: #e5e5e5;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Montserrat', -apple-system, sans-serif;
+    }
+    body { font-family: var(--font-sans); color: var(--color-primary); background: var(--color-white); line-height: 1.7; }
+    a { text-decoration: none; color: inherit; }
+    header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; border-bottom: 1px solid var(--color-border); }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 300; letter-spacing: 0.3em; }
+    nav { display: flex; gap: 2.5rem; }
+    nav a { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-secondary); }
+    nav a:hover, nav a.active { color: var(--color-primary); }
+    main { padding-top: 80px; }
+    .hero { padding: 6rem 2rem; background: var(--color-light); text-align: center; }
+    .section-title { font-family: var(--font-serif); font-size: 3rem; font-weight: 300; margin-bottom: 1rem; }
+    .section-subtitle { color: var(--color-secondary); max-width: 600px; margin: 0 auto; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 5rem 2rem; }
+    .story-text { font-size: 1.1rem; color: var(--color-secondary); margin-bottom: 2rem; line-height: 2; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin: 4rem 0; text-align: center; }
+    .value-item { padding: 2rem; }
+    .value-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .value-title { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .value-desc { color: var(--color-secondary); font-size: 0.9rem; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 4rem 2rem; background: var(--color-primary); color: white; }
+    .stat { text-align: center; }
+    .stat-number { font-family: var(--font-serif); font-size: 3rem; font-weight: 300; margin-bottom: 0.5rem; }
+    .stat-label { opacity: 0.7; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .team { text-align: center; padding: 5rem 2rem; background: var(--color-light); }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; max-width: 800px; margin: 3rem auto 0; }
+    .team-member { background: white; padding: 2rem; border-radius: 8px; }
+    .team-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--color-light); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+    .team-name { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .team-role { color: var(--color-accent); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    footer { background: var(--color-light); padding: 4rem 2rem; text-align: center; color: var(--color-secondary); font-size: 0.85rem; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .values-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
   <header>
-    <a href="/" class="logo">THE GLOVESTORY</a>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/products">Collections</a>
-      <a href="/about">About</a>
-      <a href="/membership">Join VIP</a>
-    </nav>
+    <div class="header-inner">
+      <a href="/" class="logo">THE GLOVESTORY</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/products">Collections</a>
+        <a href="/about" class="active">About</a>
+        <a href="/membership">VIP</a>
+      </nav>
+    </div>
   </header>
+
   <main>
-    <h1>Our Story</h1>
-    <p>The GloveStory was born from a passion for timeless craftsmanship and contemporary design. Each pair of our gloves is handcrafted by skilled artisans using the finest Italian leathers.</p>
-    <p>We believe that luxury should be felt, not just seen. That's why we pay meticulous attention to every stitch, every edge, and every detail.</p>
-    <p>Our commitment to quality extends beyond our products. We strive to create a community of discerning individuals who appreciate the art of fine craftsmanship.</p>
+    <section class="hero">
+      <h1 class="section-title">Our Story</h1>
+      <p class="section-subtitle">A legacy of craftsmanship, a passion for perfection</p>
+    </section>
+
+    <div class="container">
+      <p class="story-text">
+        The GloveStory was born from a passion for timeless craftsmanship and contemporary design. Founded in 2009, our journey began in a small workshop in Milan, where master artisans dedicated their lives to the art of glove making.
+      </p>
+      <p class="story-text">
+        Each pair of our gloves is handcrafted by skilled artisans with decades of experience, using only the finest Italian leathers and premium materials. We believe that luxury should be felt, not just seen — that's why we pay meticulous attention to every stitch, every edge, and every detail.
+      </p>
+      <p class="story-text">
+        Our commitment to quality extends beyond our products. We strive to create a community of discerning individuals who appreciate the art of fine craftsmanship and understand that true luxury lies in the details.
+      </p>
+
+      <div class="values-grid">
+        <div class="value-item">
+          <div class="value-icon">🎨</div>
+          <h3 class="value-title">Artistry</h3>
+          <p class="value-desc">Every glove tells a story through the hands that crafted it</p>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">✨</div>
+          <h3 class="value-title">Quality</h3>
+          <p class="value-desc">Only the finest materials from trusted suppliers worldwide</p>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">💝</div>
+          <h3 class="value-title">Passion</h3>
+          <p class="value-desc">Love for our craft drives everything we do</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Unique Designs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">15+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Handcrafted</div>
+      </div>
+    </div>
+
+    <section class="team">
+      <h2 class="section-title">Meet Our Artisans</h2>
+      <p style="color: var(--color-secondary);">The skilled hands behind our exceptional gloves</p>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="team-avatar">👨‍🎨</div>
+          <h3 class="team-name">Marco Bellini</h3>
+          <p class="team-role">Master Craftsman</p>
+        </div>
+        <div class="team-member">
+          <div class="team-avatar">👩‍🎨</div>
+          <h3 class="team-name">Sofia Rossi</h3>
+          <p class="team-role">Lead Designer</p>
+        </div>
+        <div class="team-member">
+          <div class="team-avatar">👨‍🔧</div>
+          <h3 class="team-name">Giovanni Costa</h3>
+          <p class="team-role">Materials Expert</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <p>&copy; 2024 The GloveStory. All rights reserved.</p>
+  </footer>
 </body>
 </html>
