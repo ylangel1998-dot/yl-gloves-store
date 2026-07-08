@@ -1,0 +1,24 @@
+{
+  "name": "yl-gloves-store",
+  "version": "1.0.0",
+  "description": "The GloveStory - Artisan Luxury Gloves E-commerce",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev ./dist",
+    "deploy": "npm run build && wrangler pages deploy ./dist",
+    "build": "npm run build:frontend && npm run build:worker",
+    "build:frontend": "echo 'Frontend build placeholder'",
+    "build:worker": "wrangler deploy",
+    "preview": "wrangler pages dev ./dist"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240117.0",
+    "wrangler": "^3.0.0"
+  }
+}
