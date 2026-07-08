@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product - The GloveStory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --color-primary: #1a1a1a;
+      --color-secondary: #4a4a4a;
+      --color-accent: #8b7355;
+      --color-light: #f8f6f3;
+      --color-white: #ffffff;
+      --color-border: #e5e5e5;
+      --color-success: #4CAF50;
+      --color-error: #E53935;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Montserrat', -apple-system, sans-serif;
+    }
+    body { font-family: var(--font-sans); color: var(--color-primary); background: var(--color-white); }
+    a { text-decoration: none; color: inherit; }
+    header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; border-bottom: 1px solid var(--color-border); }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 300; letter-spacing: 0.3em; }
+    nav { display: flex; gap: 2.5rem; }
+    nav a { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-secondary); }
+    nav a:hover, nav a.active { color: var(--color-primary); }
+    .header-actions { display: flex; gap: 1.5rem; align-items: center; }
+    .header-actions button { background: none; border: none; cursor: pointer; font-size: 0.85rem; color: var(--color-secondary); }
+    .cart-icon { position: relative; }
+    .cart-count { position: absolute; top: -8px; right: -12px; background: var(--color-accent); color: white; font-size: 0.65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    main { padding-top: 80px; min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+    .breadcrumb { font-size: 0.85rem; color: var(--color-secondary); margin-bottom: 2rem; }
+    .breadcrumb a { color: var(--color-accent); }
+    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .product-gallery { aspect-ratio: 1; background: var(--color-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .product-gallery img { width: 100%; height: 100%; object-fit: cover; }
+    .product-placeholder { font-size: 10rem; opacity: 0.2; }
+    .product-info h1 { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300; margin-bottom: 0.5rem; }
+    .product-category { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--color-accent); margin-bottom: 1rem; }
+    .product-price { font-size: 2rem; margin-bottom: 1rem; }
+    .price-original { color: var(--color-secondary); text-decoration: line-through; font-size: 1.2rem; margin-right: 0.5rem; }
+    .price-sale { color: var(--color-accent); }
+    .vip-badge { display: inline-block; background: linear-gradient(135deg, #8b7355, #c4a77d); color: white; font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle; }
+    .savings { color: var(--color-success); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .product-description { color: var(--color-secondary); line-height: 1.8; margin-bottom: 2rem; }
+    .quantity-selector { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .quantity-label { font-size: 0.9rem; color: var(--color-secondary); }
+    .quantity-controls { display: flex; align-items: center; border: 1px solid var(--color-border); }
+    .quantity-controls button { width: 40px; height: 40px; border: none; background: white; cursor: pointer; font-size: 1.2rem; }
+    .quantity-controls button:hover { background: var(--color-light); }
+    .quantity-controls span { width: 50px; text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border); padding: 0.5rem; }
+    .btn { display: inline-block; padding: 1rem 3rem; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid currentColor; transition: all 0.3s; cursor: pointer; background: transparent; }
+    .btn-primary { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+    .btn-primary:hover { background: var(--color-accent); border-color: var(--color-accent); }
+    .add-to-cart-btn { width: 100%; margin-bottom: 1rem; }
+    .product-features { padding: 1.5rem; background: var(--color-light); border-radius: 8px; margin-top: 2rem; }
+    .feature-row { display: flex; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--color-border); }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-row span:first-child { opacity: 0.7; }
+    .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; }
+    .toast { padding: 1rem 1.5rem; background: var(--color-primary); color: white; border-radius: 4px; margin-bottom: 0.5rem; animation: slideIn 0.3s; }
+    .toast.success { background: var(--color-success); }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .loading { text-align: center; padding: 4rem; color: var(--color-secondary); }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .product-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">THE GLOVESTORY</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/products">Collections</a>
+        <a href="/about">About</a>
+        <a href="/membership">VIP</a>
+      </nav>
+      <div class="header-actions">
+        <button onclick="window.location.href='/'">Cart <span class="cart-count" id="cartCount"></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> / <a href="/products">Collections</a> / <span id="breadcrumbName">Loading...</span>
+      </div>
+      <div class="product-layout" id="productContent">
+        <div class="loading">Loading product...</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://coyyldqmimzflbcevppj.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+
+    let product = null;
+    let quantity = 1;
+    let isVIP = false;
+    let cart = [];
+
+    const fallbackProducts = {
+      '1': { id: '1', name: 'Classic Leather Gloves', description: 'Handcrafted Italian leather gloves with silk lining. Timeless elegance for the discerning gentleman.', price: 189.00, vip_price: 113.40, category: 'fashion', stock: 50, images: [] },
+      '2': { id: '2', name: 'Winter Cashmere Gloves', description: 'Luxuriously soft cashmere blend gloves. Perfect warmth meets sophisticated style for cold weather.', price: 149.00, vip_price: 89.40, category: 'winter', stock: 35, images: [] },
+      '3': { id: '3', name: 'Performance Cycling Gloves', description: 'Technical cycling gloves with gel padding and breathable mesh. Engineered for serious cyclists.', price: 79.00, vip_price: 47.40, category: 'sports', stock: 100, images: [] },
+      '4': { id: '4', name: 'Executive Touchscreen Gloves', description: 'Premium leather touchscreen-compatible gloves. Stay connected in style without sacrificing elegance.', price: 129.00, vip_price: 77.40, category: 'touchscreen', stock: 45, images: [] },
+      '5': { id: '5', name: 'Kids Playtime Gloves', description: 'Adorable and durable gloves for little adventurers. Machine washable and comfortable for all-day wear.', price: 39.00, vip_price: 23.40, category: 'kids', stock: 200, images: [] },
+      '6': { id: '6', name: 'Stage Performance Gloves', description: 'Showmanship gloves perfect for performances. Available in classic black and elegant white.', price: 59.00, vip_price: 35.40, category: 'stage', stock: 80, images: [] },
+      '7': { id: '7', name: 'Industrial Work Gloves', description: 'Heavy-duty protection with reinforced palms. ANSI A4 rated for maximum safety and durability.', price: 49.00, vip_price: 29.40, category: 'work', stock: 150, images: [] },
+      '8': { id: '8', name: 'Driving Leather Gloves', description: 'Unlined driving gloves with perforation for breathability. Maximum grip and control at all times.', price: 159.00, vip_price: 95.40, category: 'fashion', stock: 40, images: [] }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCart();
+      checkVIP();
+      loadProduct();
+    });
+
+    function getProductId() {
+      const path = window.location.pathname;
+      const match = path.match(/\/product\/(.+)/);
+      return match ? match[1] : null;
+    }
+
+    async function loadProduct() {
+      const productId = getProductId();
+      if (!productId) {
+        window.location.href = '/products';
+        return;
+      }
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${productId}&select=*`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.length > 0) {
+            product = data[0];
+          } else {
+            product = fallbackProducts[productId] || null;
+          }
+        } else {
+          throw new Error('API error');
+        }
+      } catch (error) {
+        product = fallbackProducts[productId] || null;
+      }
+
+      if (!product) {
+        window.location.href = '/products';
+        return;
+      }
+
+      document.title = `${product.name} - The GloveStory`;
+      document.getElementById('breadcrumbName').textContent = product.name;
+      renderProduct();
+    }
+
+    function checkVIP() {
+      const user = localStorage.getItem('glove_user');
+      if (user) {
+        const userData = JSON.parse(user);
+        isVIP = userData.isVIP || false;
+      }
+    }
+
+    function loadCart() {
+      const saved = localStorage.getItem('glove_cart');
+      cart = saved ? JSON.parse(saved) : [];
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cartCount').textContent = count || '';
+    }
+
+    function renderProduct() {
+      const container = document.getElementById('productContent');
+      const displayPrice = isVIP && product.vip_price ? product.vip_price : product.price;
+      const hasVIPPrice = isVIP && product.vip_price && product.vip_price < product.price;
+      const savings = hasVIPPrice ? (product.price - product.vip_price).toFixed(2) : 0;
+
+      container.innerHTML = `
+        <div class="product-gallery">
+          ${product.images && product.images[0]
+            ? `<img src="${product.images[0]}" alt="${product.name}">`
+            : '<div class="product-placeholder">🧤</div>'
+          }
+        </div>
+        <div class="product-info">
+          <div class="product-category">${product.category || 'Premium'}</div>
+          <h1>${product.name}</h1>
+          <div class="product-price">
+            <span class="price-${hasVIPPrice ? 'sale' : ''}">$${displayPrice.toFixed(2)}</span>
+            ${hasVIPPrice ? `<span class="price-original">$${product.price.toFixed(2)}</span><span class="vip-badge">VIP -40%</span>` : ''}
+          </div>
+          ${hasVIPPrice ? `<div class="savings">You save $${savings} with VIP membership!</div>` : ''}
+          <p class="product-description">${product.description || 'A beautifully crafted glove that combines style with functionality.'}</p>
+
+          <div class="quantity-selector">
+            <span class="quantity-label">Quantity:</span>
+            <div class="quantity-controls">
+              <button onclick="updateQuantity(-1)">-</button>
+              <span id="quantityDisplay">${quantity}</span>
+              <button onclick="updateQuantity(1)">+</button>
+            </div>
+            ${product.stock > 0 ? `<span style="margin-left: 1rem; color: var(--color-secondary); font-size: 0.85rem;">${product.stock} in stock</span>` : '<span style="margin-left: 1rem; color: var(--color-error);">Out of stock</span>'}
+          </div>
+
+          <button class="btn btn-primary add-to-cart-btn" onclick="addToCart()" ${product.stock <= 0 ? 'disabled' : ''}>
+            ${product.stock > 0 ? 'ADD TO CART' : 'OUT OF STOCK'}
+          </button>
+
+          <div class="product-features">
+            <div class="feature-row">
+              <span>🚚 Shipping</span>
+              <span>Free shipping on orders over $100</span>
+            </div>
+            <div class="feature-row">
+              <span>↩️ Returns</span>
+              <span>30-day hassle-free returns</span>
+            </div>
+            <div class="feature-row">
+              <span>🔒 Security</span>
+              <span>Secure checkout guaranteed</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateQuantity(delta) {
+      quantity = Math.max(1, Math.min(quantity + delta, product.stock || 99));
+      document.getElementById('quantityDisplay').textContent = quantity;
+    }
+
+    function addToCart() {
+      const price = isVIP && product.vip_price ? product.vip_price : product.price;
+      const existing = cart.find(item => item.id === product.id);
+
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          vip_price: product.vip_price,
+          image: product.images && product.images[0] ? product.images[0] : null,
+          quantity: quantity
+        });
+      }
+
+      localStorage.setItem('glove_cart', JSON.stringify(cart));
+      updateCartCount();
+      showToast('Added to cart!', 'success');
+    }
+
+    function showToast(message, type = '') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>
