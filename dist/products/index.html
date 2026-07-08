@@ -3,35 +3,226 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products - The GloveStory</title>
+  <title>Collections - The GloveStory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Georgia', serif; color: #333; }
-    header { padding: 2rem; text-align: center; border-bottom: 1px solid #eee; }
-    .logo { font-size: 1.5rem; letter-spacing: 0.3em; text-decoration: none; color: #333; }
-    nav { margin-top: 1rem; }
-    nav a { margin: 0 1rem; text-decoration: none; color: #666; }
-    main { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-    h1 { font-weight: 300; margin-bottom: 2rem; }
-    .coming-soon { text-align: center; padding: 4rem; color: #999; }
+    :root {
+      --color-primary: #1a1a1a;
+      --color-secondary: #4a4a4a;
+      --color-accent: #8b7355;
+      --color-light: #f8f6f3;
+      --color-white: #ffffff;
+      --color-border: #e5e5e5;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Montserrat', -apple-system, sans-serif;
+    }
+    body { font-family: var(--font-sans); color: var(--color-primary); background: var(--color-white); }
+    a { text-decoration: none; color: inherit; }
+    header { position: fixed; top: 0; left: 0; right: 0; background: white; z-index: 1000; border-bottom: 1px solid var(--color-border); }
+    .header-inner { max-width: 1400px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: var(--font-serif); font-size: 1.8rem; font-weight: 300; letter-spacing: 0.3em; }
+    nav { display: flex; gap: 2.5rem; }
+    nav a { font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-secondary); }
+    nav a:hover, nav a.active { color: var(--color-primary); }
+    .header-actions { display: flex; gap: 1.5rem; align-items: center; }
+    .header-actions button { background: none; border: none; cursor: pointer; font-size: 0.85rem; color: var(--color-secondary); }
+    .cart-icon { position: relative; }
+    .cart-count { position: absolute; top: -8px; right: -12px; background: var(--color-accent); color: white; font-size: 0.65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    main { padding-top: 80px; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+    .section-title { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem; }
+    .filters { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .btn { display: inline-block; padding: 0.8rem 2rem; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--color-primary); transition: all 0.3s; cursor: pointer; background: transparent; }
+    .btn:hover { background: var(--color-primary); color: white; }
+    .btn-primary { background: var(--color-primary); color: white; }
+    .btn-primary:hover { background: var(--color-accent); border-color: var(--color-accent); }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--color-light); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .product-image { aspect-ratio: 1; background: var(--color-light); display: flex; align-items: center; justify-content: center; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; }
+    .product-placeholder { font-size: 4rem; color: var(--color-accent); opacity: 0.5; }
+    .product-info { padding: 1.5rem; }
+    .product-category { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 0.5rem; }
+    .product-name { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .product-price { font-size: 1rem; color: var(--color-secondary); }
+    .vip-price { color: var(--color-accent); margin-left: 0.5rem; }
+    .vip-badge { display: inline-block; background: linear-gradient(135deg, #8b7355, #c4a77d); color: white; font-size: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 2px; margin-left: 0.5rem; }
+    .loading { text-align: center; padding: 4rem; color: var(--color-secondary); }
+    footer { background: var(--color-light); padding: 4rem 2rem; margin-top: auto; }
+    .footer-inner { max-width: 1400px; margin: 0 auto; text-align: center; color: var(--color-secondary); font-size: 0.85rem; }
+    .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; }
+    .toast { padding: 1rem 1.5rem; background: var(--color-primary); color: white; border-radius: 4px; margin-bottom: 0.5rem; animation: slideIn 0.3s; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @media (max-width: 768px) { nav { display: none; } }
   </style>
 </head>
 <body>
   <header>
-    <a href="/" class="logo">THE GLOVESTORY</a>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/products">Collections</a>
-      <a href="/about">About</a>
-      <a href="/membership">Join VIP</a>
-    </nav>
+    <div class="header-inner">
+      <a href="/" class="logo">THE GLOVESTORY</a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/products" class="active">Collections</a>
+        <a href="/about">About</a>
+        <a href="/membership">VIP</a>
+      </nav>
+      <div class="header-actions">
+        <button onclick="toggleCart()">Cart <span class="cart-count" id="cartCount"></span></button>
+      </div>
+    </div>
   </header>
+
   <main>
-    <h1>Our Collections</h1>
-    <div class="coming-soon">
-      <p>Products will be available soon.</p>
-      <p>Stay tuned for our upcoming collection.</p>
+    <div class="container">
+      <h1 class="section-title">Our Collections</h1>
+      <div class="filters">
+        <button class="btn btn-primary" data-filter="all" onclick="filterProducts('all')">All</button>
+        <button class="btn" data-filter="fashion" onclick="filterProducts('fashion')">Fashion</button>
+        <button class="btn" data-filter="winter" onclick="filterProducts('winter')">Winter</button>
+        <button class="btn" data-filter="sports" onclick="filterProducts('sports')">Sports</button>
+        <button class="btn" data-filter="work" onclick="filterProducts('work')">Work</button>
+        <button class="btn" data-filter="touchscreen" onclick="filterProducts('touchscreen')">Touchscreen</button>
+        <button class="btn" data-filter="kids" onclick="filterProducts('kids')">Kids</button>
+      </div>
+      <div class="products-grid" id="productsGrid">
+        <div class="loading">Loading products...</div>
+      </div>
     </div>
   </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; 2024 The GloveStory. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://coyyldqmimzflbcevppj.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE';
+
+    let products = [];
+    let cart = [];
+    let isVIP = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCart();
+      loadProducts();
+      checkVIP();
+
+      // Check URL params for category filter
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get('category');
+      if (category) filterProducts(category);
+    });
+
+    async function loadProducts() {
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&is_active=eq.true&order=created_at.desc`, {
+          headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+        });
+        if (response.ok) {
+          products = await response.json();
+        } else {
+          throw new Error('API error');
+        }
+      } catch (error) {
+        // Fallback data
+        products = [
+          { id: '1', name: 'Classic Leather Gloves', description: 'Handcrafted Italian leather gloves with silk lining.', price: 189.00, vip_price: 113.40, category: 'fashion', images: [] },
+          { id: '2', name: 'Winter Cashmere Gloves', description: 'Luxuriously soft cashmere blend gloves.', price: 149.00, vip_price: 89.40, category: 'winter', images: [] },
+          { id: '3', name: 'Performance Cycling Gloves', description: 'Technical cycling gloves with gel padding.', price: 79.00, vip_price: 47.40, category: 'sports', images: [] },
+          { id: '4', name: 'Executive Touchscreen Gloves', description: 'Premium leather touchscreen-compatible gloves.', price: 129.00, vip_price: 77.40, category: 'touchscreen', images: [] },
+          { id: '5', name: 'Kids Playtime Gloves', description: 'Adorable and durable gloves for little adventurers.', price: 39.00, vip_price: 23.40, category: 'kids', images: [] },
+          { id: '6', name: 'Stage Performance Gloves', description: 'Showmanship gloves perfect for performances.', price: 59.00, vip_price: 35.40, category: 'stage', images: [] },
+          { id: '7', name: 'Industrial Work Gloves', description: 'Heavy-duty protection with reinforced palms.', price: 49.00, vip_price: 29.40, category: 'work', images: [] },
+          { id: '8', name: 'Driving Leather Gloves', description: 'Unlined driving gloves with perforation.', price: 159.00, vip_price: 95.40, category: 'fashion', images: [] }
+        ];
+      }
+      renderProducts(products);
+    }
+
+    function checkVIP() {
+      const user = localStorage.getItem('glove_user');
+      if (user) {
+        const userData = JSON.parse(user);
+        isVIP = userData.isVIP || false;
+      }
+    }
+
+    function filterProducts(category) {
+      document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.classList.remove('btn-primary');
+        if (btn.dataset.filter === category) btn.classList.add('btn-primary');
+      });
+
+      const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+      renderProducts(filtered);
+
+      // Update URL
+      const url = category === 'all' ? '/products' : `/products?category=${category}`;
+      window.history.pushState({}, '', url);
+    }
+
+    function renderProducts(productList) {
+      const grid = document.getElementById('productsGrid');
+      if (productList.length === 0) {
+        grid.innerHTML = '<div class="loading">No products found.</div>';
+        return;
+      }
+      grid.innerHTML = productList.map(p => {
+        const price = isVIP && p.vip_price ? p.vip_price : p.price;
+        const hasVIP = isVIP && p.vip_price && p.vip_price < p.price;
+        return `
+          <div class="product-card" onclick="viewProduct('${p.id}')">
+            <div class="product-image">
+              ${p.images && p.images[0] ? `<img src="${p.images[0]}" alt="${p.name}">` : '<div class="product-placeholder">🧤</div>'}
+            </div>
+            <div class="product-info">
+              <div class="product-category">${p.category || 'General'}</div>
+              <h3 class="product-name">${p.name}</h3>
+              <div class="product-price">
+                $${price.toFixed(2)}
+                ${hasVIP ? `<span class="vip-price">$${p.price.toFixed(2)}</span><span class="vip-badge">VIP</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function viewProduct(id) {
+      window.location.href = `/product/${id}`;
+    }
+
+    function loadCart() {
+      const saved = localStorage.getItem('glove_cart');
+      cart = saved ? JSON.parse(saved) : [];
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cartCount').textContent = count || '';
+    }
+
+    function toggleCart() {
+      window.location.href = '/#cart';
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
 </body>
 </html>
